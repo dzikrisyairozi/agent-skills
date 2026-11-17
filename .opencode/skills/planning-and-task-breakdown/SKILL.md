@@ -187,7 +187,7 @@ When using an external tracker, note it in `tasks/<feature-name>/plan.md` (e.g. 
 - [Key decision 2 and rationale]
 
 ## File Boundary
-Every path the tasks touch, repo-relative. A glob only for generated output whose names are not known in advance. `/build` stops and asks before editing a file not listed here.
+Every path the tasks touch, repo-relative: the union of the tasks' "Files likely touched" lists, with Create, Modify or Delete added. Keep the two in step; a path in one and not the other is a review finding. A glob only for generated output whose names are not known in advance. `/build` stops and asks before editing a file not listed here.
 
 Create:
 - [path]

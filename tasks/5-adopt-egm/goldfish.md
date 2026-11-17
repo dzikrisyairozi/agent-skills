@@ -194,3 +194,7 @@ Counts: 0 Blocker, 2 Major, 6 Nit. Decisions: 5 Fix, 2 Contest, 1 Escalate. No B
 1. **Discovery and docs outside the File Boundary** (9, 20, 21): add `humanize` to `skills/using-agent-skills/SKILL.md`, `docs/opencode-setup.md` and `docs/getting-started.md`; add the goldfish fan-out to `references/orchestration-patterns.md`; add `goldfish-reviewer` to the persona lists in `docs/getting-started.md`, `docs/antigravity-setup.md` and `docs/copilot-setup.md`. Seven files.
 2. **Unexercised success criteria** (7): run the `/spec` lenses on `spec/5-adopt-egm/spec.md` (two subagents), and decide whether the `not run` path needs a live demonstration.
 3. **THIRD_PARTY_NOTICES.md** (17): add an EGM entry or not.
+
+## Escalations resolved (2026-11-18)
+
+The owner approved all three. 1: done in `843ab44` (seven files added to the File Boundary). 2: the `/spec` lenses ran on the spec, report in `spec/5-adopt-egm/goldfish.md`; the `not run` path stays untested. 3: EGM entry added to `THIRD_PARTY_NOTICES.md`.

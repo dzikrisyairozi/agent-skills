@@ -3,6 +3,19 @@
 Issue: https://github.com/dzikrisyairozi/agent-skills/issues/5
 Source model: https://github.com/google/elephant-goldfish-model (EGM, Apache-2.0), read at commit state of 2026-11-17.
 
+## 0. Terms and current behavior
+
+Read this first if you have not used the pack.
+
+- **Harnesses** this pack installs to: Claude Code, Codex, Gemini CLI, OpenCode, Cursor, Windsurf, Antigravity and GitHub Copilot (`README.md`). "Persona support" means the harness can load an `agents/*.md` file as a subagent definition (Claude Code does); elsewhere the same prompt goes to a general-purpose subagent.
+- **Command surfaces:** each command exists three times, `.claude/commands/<name>.md`, `commands/<name>.toml` and `.gemini/commands/<name>.toml`, with the same body. Skills live in `skills/<name>/SKILL.md` and are copied by hand (`cp -r`) to `.opencode/skills/`; `scripts/validate-opencode-sync.js` only detects a stale copy, it does not copy. Skill sections follow `docs/skill-anatomy.md`.
+- **Feature slug:** `spec/<feature-name>/` and `tasks/<feature-name>/` share one kebab-case slug. With a GitHub issue it is `<issue number>-<short title>` (this spec: `5-adopt-egm`), per `.claude/commands/spec.md`. `/review` derives it from the branch by dropping the `<type>/` prefix (`feat/5-adopt-egm` gives `5-adopt-egm`).
+- **`/spec` and `/plan` today** ask clarifying questions, write the document, and end at an approval prompt. Nothing reviews the document first.
+- **`/review` today** (`.claude/commands/review.md`): local mode reviews the working changes and prints the result in chat. PR mode runs when the argument is a PR URL or `#<n>`; it posts one `gh pr comment` and writes `tasks/<feature-name>/review/{plan,todo}.md`. Both modes then run `/ponytail-review`, a separately installed skill that lists over-engineering findings, and append its output.
+- **`/build auto`** (`.claude/commands/build.md`) runs every task in the plan after one approval.
+- **`/humanize` today** is a private skill on the owner's machine that rewrites text using `~/.claude/WRITING.md`. Nothing in this repo can call it.
+- **EGM terms** used in section 3 (`egm-resolve`, the 7-lens brainstorm swarm, the five-stage review pipeline, two-clean-rounds) are described in the EGM README and its `docs/designs/review.md`.
+
 ## 1. Objective
 
 `/spec`, `/plan` and `/review` are run daily, and today the same session that wrote a spec, plan or diff also judges it. That session already holds the missing context in memory, so it cannot see what the document fails to say. EGM's answer is two roles: an elephant (the session with full context) writes, and goldfish (fresh subagents that get only the document and the repo) review. The human decides on the findings.
@@ -13,7 +26,7 @@ This change adds three things:
 2. `/spec <github issue>` rewrites the issue's title, description and labels once the spec is saved.
 3. `/review <PR>` posts a real GitHub review with inline comments and suggested changes, written in lowercase, instead of one long comment.
 
-Items 2 and 3 put text on GitHub, so the writing rules behind `/humanize` move into this repo as a skill.
+Why items 2 and 3: issues are often opened with one line and no body (issue #5 was "adopt egm", empty), and `/spec` is the point where the real requirements are known, so it is the cheapest time to make the issue say what will be built. A single long PR comment cannot anchor a finding to a line, offer a suggestion the author applies with one click, or be resolved finding by finding; an inline review does all three. Both put text on GitHub, so the writing rules behind `/humanize` move into this repo as a skill.
 
 User: the repo owner, on every harness this pack installs to.
 
@@ -42,7 +55,7 @@ Taken:
 - Reports go to a file. Chat gets a count and a path.
 - Spec template gains Non-goals, Alternatives considered, and Risks (from EGM's feature-spec standard).
 - Drift check: `/review` compares the diff against the feature's spec and plan.
-- Contradiction stop: if a new request contradicts the saved spec, stop and ask before editing any file.
+- Contradiction stop, in `/spec` only: when the user asks for something that conflicts with the saved spec's Objective, Non-goals or Boundaries, the session names the conflict and asks which one wins before editing any file. Detection is the session comparing the request with the saved spec; there is no tool for it.
 
 Skipped, with the reason:
 
@@ -57,7 +70,7 @@ Skipped, with the reason:
 
 ### 4.1 Reviewers
 
-One persona, `agents/goldfish-reviewer.md`, parameterized by a lens. The rubrics live in `references/goldfish-review.md`, so harnesses without persona support can hand the same text to a generic subagent.
+One persona, `agents/goldfish-reviewer.md`. The lens reaches it as text: `references/goldfish-review.md` holds the rubrics and a spawn prompt template with four slots (lens, document, other readable paths, rubric text), and the command fills the template and sends it as the subagent's prompt. Harnesses without persona support send the same prompt to a general-purpose subagent.
 
 | Lens | Runs in | Asks |
 |---|---|---|
@@ -129,11 +142,11 @@ How the existing system works, per this document: ...
 
 ### 4.4 Template changes
 
-`spec-driven-development` spec template adds three sections: Non-goals, Alternatives considered (each rejected option with a concrete reason), Risks.
+`spec-driven-development` spec template adds three sections: Non-goals, Alternatives considered (each rejected option with a concrete reason), Risks. Spec Risks are design risks (what could make the approach wrong); the plan's "Risks and Mitigations" table stays for implementation risks.
 
 `planning-and-task-breakdown` adds:
 
-- A "File boundary" section in `plan.md`: every repo-relative path, marked Create, Modify or Delete. A glob is allowed only for generated output.
+- A "File Boundary" section in `plan.md`: the union of the tasks' "Files likely touched" lists, each path marked Create, Modify or Delete. The readiness lens reports any path in one list and not the other, so the two cannot drift silently. A glob is allowed only for generated output.
 - The zero-decision rule in the task-writing step, with one before/after example ("update the auth service" versus "add `expiresAt` to `Session` in `src/auth/session.ts`").
 
 Both skills add one line to their process: these commands write only spec and plan artifacts, never source files.
@@ -144,11 +157,11 @@ Order of work in every mode:
 
 1. **Goldfish code review.** Spawn the existing `code-reviewer` persona as a fresh subagent with the diff, the changed files, and `spec/<feature>/spec.md` plus `tasks/<feature>/plan.md` when they exist. It gets no conversation summary. This matters most when the session running `/review` is the one that ran `/build`.
 2. **Drift check**, same subagent, only when a spec exists. Four categories: a feature the spec describes that the diff lacks; a model or type missing specified fields; a hardcoded value or stub where the spec describes real logic; a different pattern or dependency than the spec chose. Each drift finding says which side should change, spec or code, and leaves the choice to the user.
-3. **Triage** by the main session using 4.3. A contested finding is dropped from what gets posted and kept in the local file with its evidence.
+3. **Triage** by the main session using 4.3. Code findings keep their labels; for triage, Critical counts as Blocker, Important (or the persona's Required) as Major, and Suggestion (or Optional, Nit) as Nit. A contested finding is dropped from what gets posted and kept with its evidence: in `tasks/<feature-name>/review/plan.md` on a PR, under "Contested" in the printed review in local mode.
 4. `/ponytail-review` add-on, unchanged.
 5. Output. Local mode prints the review as today. PR mode does 4.6 and still writes `tasks/<feature>/review/{plan,todo}.md` as today.
 
-Feature slug for step 1 comes from the branch name, the same derivation PR mode already uses.
+Feature slug for step 1: see section 0.
 
 ### 4.6 PR mode posting
 
@@ -177,10 +190,12 @@ Rules:
 
 - One inline comment per finding that maps to a line in the diff. Multi-line findings use `start_line` and `line`.
 - A `suggestion` block is included only when the fix is an exact replacement of the commented lines. Otherwise the comment describes the change and shows a short code block.
-- Before posting, check each `path` and `line` against `gh pr diff`. A finding on a line outside the diff goes into the summary body with its `file:line`. If the API still returns 422, move the rejected comment into the body and post once more.
+- `{owner}/{repo}` come from the PR URL, or from `gh repo view --json nameWithOwner` for `#<n>`.
+- Commentable lines come from `gh api repos/{owner}/{repo}/pulls/{number}/files --paginate`: in each file's `patch`, a hunk header `@@ -a,b +c,d @@` makes new-file lines `c` to `c+d-1` commentable on the `RIGHT` side, and both `start_line` and `line` must fall in one hunk. A file with no `patch` has none. A finding on any other line goes into the summary body with its `file:line`.
+- If the API returns 422, its error does not say which comment failed, so move every inline comment into the body and post once more; on a second failure, report it.
 - Summary body: verdict first, then counts by severity, then findings that could not be inline, then the ponytail section. No headings for a short review.
 - Event is always `COMMENT`. GitHub rejects `APPROVE` and `REQUEST_CHANGES` on your own PR, and a comment review works everywhere.
-- Every body goes through the `humanize` skill's github voice (4.8) before the JSON is written.
+- Every body goes through the `humanize` skill's github voice (4.8) before the JSON is written. "Goes through" means the session running `/review` loads the skill and rewrites the text itself, under the skill's rule that no fact, number, name or meaning changes.
 
 ### 4.7 `/spec` with a GitHub issue
 
@@ -217,7 +232,7 @@ agents/goldfish-reviewer.md
 references/goldfish-review.md                  # lenses, rubrics, triage rules, report layout
 skills/humanize/SKILL.md
 skills/humanize/references/writing-rules.md
-.opencode/skills/humanize/**                   # copy, kept in sync by the validator
+.opencode/skills/humanize/**                   # copied by hand; the sync validator fails if it is stale
 ```
 
 Modify:
@@ -288,13 +303,14 @@ This repo has no runtime code in the changed paths, so the checks are the valida
 - **Full five-stage pipeline.** Rejected by the user for cost.
 - **Opt-in goldfish flag.** Rejected by the user: it would be forgotten.
 - **Keep `gh pr comment` and add code blocks.** Rejected: no line anchoring, no suggestion blocks to apply from the GitHub UI, no threads to resolve.
+- **Build goldfish triage on `doubt-driven-development` RECONCILE.** Rejected: that skill reviews one claim at a time during a build and allows a degraded in-thread fallback. A document gate needs fixed lenses and no in-thread fallback. `references/goldfish-review.md` states the difference and when to use each.
 - **Reference the private `/humanize` skill.** Rejected: issue and PR text would be humanized only on one machine.
 
 ## 12. Risks
 
 - **Token cost.** Two subagents per `/spec` and `/plan`, one per `/review`. Mitigation: one round by default, four lenses and no more.
 - **Noisy findings.** A zero-context reviewer flags things the author knows are fine. Mitigation: the contest and escalate rules, and reviewers are told they know software in general, so only project-specific terms get flagged.
-- **Line mapping in PR reviews.** A wrong line makes the whole review POST fail with 422. Mitigation: pre-check against the diff, then the one retry in 4.6.
+- **Line mapping in PR reviews.** A wrong line makes the whole review POST fail with 422. Mitigation: pre-check against the PR's patch hunks, then the one retry in 4.6.
 - **Lowercase on a PR with outside reviewers** can read as careless. Mitigation: none planned; this is a stated preference of the owner.
 - **Issue body overwrite.** Mitigation: GitHub's edit history.
 
@@ -315,6 +331,6 @@ This repo has no runtime code in the changed paths, so the checks are the valida
 
 Decided on 2026-11-17, at the user's request to pick the best option.
 
-1. **`/build` and the file boundary: yes, as a stop.** When a task needs to create, modify or delete a file that the plan's File boundary does not list, `/build` stops and asks, in both single-task and `auto` mode. The user either approves the extra file (it is then added to the boundary in `plan.md`) or the task is rescoped. Reason: the boundary is only worth writing if something reads it, and unplanned adjacent edits are the usual way a small task grows. A plan with no File boundary section (older plans) skips the check.
+1. **`/build` and the file boundary: yes, as a stop.** When a task needs to create, modify or delete a file that the plan's File boundary does not list, `/build` stops and asks, in both single-task and `auto` mode. The user either approves the extra file (it is then added to the boundary in `plan.md`) or the task is rescoped. Reason: the boundary is only worth writing if something reads it, and unplanned adjacent edits are the usual way a small task grows. A plan with no File boundary section (older plans) skips the check. It is the hard stop behind Rule 0.5 (Scope Discipline) in `skills/incremental-implementation/SKILL.md`, not a separate rule.
 2. **Issue text uses the same lowercase github voice as PR comments.** One rule for everything posted to GitHub is easier to follow than two, and it matches how the owner writes issues by hand.
 3. **The comprehension paraphrase is shown in chat** at the `/spec` approval prompt, above the finding counts. It is the fastest check that the spec says what was meant.

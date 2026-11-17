@@ -21,7 +21,7 @@ Never commit directly to `master`, `main`, or `develop`. Before the *first* comm
 
 ## File Boundary
 
-If `tasks/<feature-name>/plan.md` has a File Boundary section, it lists every file this build may create, modify or delete. Before touching a file that is not on it, stop and ask, in both modes. If the user approves, add the path to the plan's File Boundary and continue; otherwise rescope the task. Task-status updates and files under `spec/` and `tasks/` are always allowed. A plan with no File Boundary section skips this check.
+If `tasks/<feature-name>/plan.md` has a File Boundary section, it lists every file this build may create, modify or delete. Before touching a file that is not on it, stop and ask, in both modes. If the user approves, add the path to the plan's File Boundary and continue; otherwise rescope the task. Task-status updates and files under `spec/` and `tasks/` are always allowed. A plan with no File Boundary section skips this check. This is the hard stop behind Rule 0.5 (Scope Discipline) in `incremental-implementation`: a file the boundary does not list goes in the "noticed but not touching" note unless the user approves it.
 
 ## Default: one task
 

@@ -24,5 +24,5 @@ Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
 
 ## Phase 5: docs, version, dogfood
 - [x] T9 `CLAUDE.md`, `AGENTS.md`, `README.md`; version 0.2.0 in six JSON files
-- [ ] T10 Dogfood (goldfish and issue sync done; push, PR and `/review` pending approval): goldfish on this plan, issue sync on #5, then ASK FIRST to push, open the PR and run `/review` on it
+- [x] T10 Dogfood: goldfish on plan and spec, issue sync, push, PR, `/review`: goldfish on this plan, issue sync on #5, then ASK FIRST to push, open the PR and run `/review` on it
 - [ ] Checkpoint: spec section 13 criteria all checked, `/quiz` gate passed

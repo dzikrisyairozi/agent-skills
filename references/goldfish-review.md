@@ -50,7 +50,7 @@ You are the engineer who will build this plan tomorrow, alone.
 2. Each step names the file, the symbol and the change. "Update the auth service" fails. "Add `expiresAt: Date` to `Session` in `src/auth/session.ts`" passes.
 3. Each task has a test or a concrete check.
 4. Each phase leaves the repo building and its tests passing.
-5. The plan has a File Boundary section and marks every path Create, Modify or Delete. If it is missing, report it once as a Major.
+5. The plan has a File Boundary section and marks every path Create, Modify or Delete. If it is missing, report it once as a Major. Every path in a task's Files list appears in the File Boundary, and every File Boundary path appears in at least one task; report each mismatch.
 
 ### Lens: codebase
 
@@ -95,7 +95,7 @@ Use the `goldfish-reviewer` persona when the harness supports personas. Otherwis
 
 1. Save the draft to its path.
 2. Spawn the command's two lenses in parallel.
-3. A reviewer that errors, times out or returns nothing gets one retry. If it fails again, its status is `not run`. Never report a reviewer that did not run as a reviewer with no findings.
+3. A reviewer has failed when the subagent call errors, the harness times it out, or it returns neither a finding nor the words "no findings". A failed reviewer gets one retry. If it fails again, its status is `not run`. Never report a reviewer that did not run as a reviewer with no findings.
 4. Triage every finding (next section).
 5. Write the report.
 6. Apply the Fix decisions to the document.
@@ -117,6 +117,12 @@ Rules:
 - Do not change a severity. To disagree with one, contest the finding and say why.
 - Do not add text only so a subagent will stop flagging it. Add context when a human reader needs it; otherwise Escalate.
 - You wrote the document. Wanting to contest is not evidence that the reviewer is wrong.
+
+## How this relates to other review steps
+
+- **`doubt-driven-development`** reviews one decision or claim during a build, loops up to three times, and allows a flagged, degraded self-review when nesting blocks a subagent. The goldfish review checks a whole document at an approval gate with fixed lenses and one round. Its triage (Fix, Contest, Escalate, Decline) replaces doubt-driven's RECONCILE classes only for these documents. Use doubt-driven inside `/build`; use this at the end of `/spec` and `/plan`.
+- **`/ship`** may run its personas in-thread on harnesses without an Agent tool, because its personas judge code that is on disk either way. A goldfish is only useful because it lacks the conversation, so running the rubric in-thread gives back the self-review it is meant to replace. That is why the fallback below refuses instead of simulating.
+- Both reviews use the parallel fan-out with merge in [orchestration-patterns.md](orchestration-patterns.md); the goldfish merge step is triage.
 
 ## No subagent support
 
