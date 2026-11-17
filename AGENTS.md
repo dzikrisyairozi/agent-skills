@@ -24,7 +24,7 @@ OpenCode uses a **skill-driven execution model** powered by the `skill` tool and
 - PLAN → `planning-and-task-breakdown`
 - BUILD → `incremental-implementation` + `test-driven-development`
 - VERIFY → `debugging-and-error-recovery`
-- REVIEW → `code-review-and-quality`
+- REVIEW → `code-review-and-quality` (text posted to GitHub goes through `humanize` with its github voice)
 - SHIP → `shipping-and-launch`
 
 For every request: determine if a skill applies (even a small chance), invoke it via the `skill` tool, follow the workflow strictly, and only implement after required gated steps (spec, plan) are complete. "This is too small for a skill" and "I'll just quickly implement this" are rationalizations to ignore, not reasons to skip a skill that applies.
@@ -37,7 +37,7 @@ Three composable layers, not to be confused:
 - **Personas** (`agents/<role>.md`) — roles with a perspective and an output format. The *who*.
 - **Slash commands** (`.claude/commands/*.md`, `commands/*.toml`, `.gemini/commands/*.toml`) — user-facing entry points. The *when*.
 
-**The user (or a slash command) is the orchestrator. Personas do not invoke other personas.** A persona may invoke skills. The only endorsed multi-persona pattern is **parallel fan-out with a merge step** — `/ship` runs `code-reviewer`, `security-auditor`, and `test-engineer` concurrently, then synthesizes. Do not build a "router" persona.
+**The user (or a slash command) is the orchestrator. Personas do not invoke other personas.** A persona may invoke skills. The only endorsed multi-persona pattern is **parallel fan-out with a merge step** — `/ship` runs `code-reviewer`, `security-auditor`, and `test-engineer` concurrently, then synthesizes. Do not build a "router" persona. `/spec` and `/plan` also fan out, to two `goldfish-reviewer` instances with different lenses, and the command triages their findings (`references/goldfish-review.md`).
 
 See `docs/agents.md` for the decision matrix and `references/orchestration-patterns.md` for the pattern catalog.
 

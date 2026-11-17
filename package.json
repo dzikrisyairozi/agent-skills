@@ -1,6 +1,6 @@
 {
   "name": "claude-multi-agent-dev",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Harness-agnostic engineering skills and lifecycle commands (spec, plan, build, test, review, ship) for AI coding agents.",
   "scripts": {
