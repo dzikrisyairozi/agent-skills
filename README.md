@@ -15,7 +15,7 @@ This is a personal fork of [addyosmani/agent-skills](https://github.com/addyosma
 
 ## Elephant and goldfish
 
-`/spec`, `/plan` and `/review` split writing from reviewing, following the [elephant-goldfish model](https://github.com/google/elephant-goldfish-model). The elephant is the session that has the conversation and writes the document. Goldfish are fresh subagents that read only the saved document and the repo, so they catch what the author filled in from memory. You decide on their findings. The protocol is in `references/goldfish-review.md`.
+`/spec`, `/plan` and `/review` split writing from reviewing, following the [elephant-goldfish model](https://github.com/google/elephant-goldfish-model). The elephant is the session that has the conversation and writes the document. Goldfish are fresh subagents that read only the saved document and the repo, so they catch what the author filled in from memory. You decide on their findings. The protocol is in `references/goldfish-review.md`. Text these commands post to GitHub (issue edits, PR reviews) goes through the `humanize` skill first.
 
 ## Commands
 

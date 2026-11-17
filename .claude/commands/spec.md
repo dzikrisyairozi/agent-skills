@@ -15,7 +15,7 @@ If code already exists in this area (not a greenfield project), ground the spec 
 - Use serena's `get_symbols_overview` / `find_symbol` on files this feature will touch, so acceptance criteria match current behavior, not guesses.
 - graphify is optional for a rough architecture map (`graphify god-nodes`, `graphify explain`) — treat it as a lead to verify with grep, not a citable fact. It's been shown to conflate similarly-named symbols (e.g. a class and its lowercase singleton instance) and to pull in unrelated files through barrel-file re-exports.
 
-Then generate a structured spec covering all six core areas: objective, commands, project structure, code style, testing strategy, and boundaries.
+Then generate a structured spec covering all six core areas: objective, commands, project structure, code style, testing strategy, and boundaries. Also fill in the template's Non-goals, Alternatives Considered and Risks sections.
 
 Save the spec to `spec/<feature-name>/spec.md` (create the directory if needed), then run the Goldfish review step of the skill and ask for approval once `spec/<feature-name>/goldfish.md` is written. `<feature-name>` is a kebab-case slug reused across spec/plan/tasks for this feature; when the work has a GitHub issue, prefix it with the issue number — e.g. `spec/377-chat-surface-materials/spec.md`. Never write `SPEC.md` to the project root.
 

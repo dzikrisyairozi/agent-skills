@@ -81,7 +81,7 @@ ASSUMPTIONS I'M MAKING:
 
 Don't silently fill in ambiguous requirements. The spec's entire purpose is to surface misunderstandings *before* code gets written — assumptions are the most dangerous form of misunderstanding.
 
-**Write a spec document covering these six core areas:**
+**Write a spec document covering these six core areas** (the template below also asks for Non-goals, Alternatives Considered and Risks)**:**
 
 1. **Objective** — What are we building and why? Who is the user? What does success look like?
 

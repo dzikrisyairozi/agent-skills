@@ -225,7 +225,7 @@ Each drift finding says which side should change, the spec or the code. The user
 
 ### Triage
 
-The main session triages the subagent's findings with the rules in [../../references/goldfish-review.md](../../references/goldfish-review.md): Fix, Contest, Escalate or Decline, and a contest must cite something the reviewer could read. A contested finding is not posted to the PR. It stays in the local review file with its evidence, so a later reader can check the call.
+The main session triages the subagent's findings with the rules in [../../references/goldfish-review.md](../../references/goldfish-review.md): Fix, Contest, Escalate or Decline, and a contest must cite something the reviewer could read. Code findings keep their code-review labels (Critical, Important, Suggestion; Required from `agents/code-reviewer.md` counts as Important, and its Optional and Nit as Suggestion); for triage, Critical counts as Blocker, Important as Major, and Suggestion as Nit, so only a Suggestion can be declined. A contested finding is not posted to the PR. On a PR it stays in `tasks/<feature-name>/review/plan.md` with its evidence; in local mode it is listed under "Contested" at the end of the review output, with its evidence.
 
 ## Posting a PR Review
 
@@ -254,7 +254,7 @@ When the review target is a pull request, post one GitHub review with inline com
    }
    ```
 
-8. **Post it.** `gh api repos/<owner>/<repo>/pulls/<n>/reviews --method POST --input <file>`. If GitHub answers 422 because of a line, move that comment into the summary body as `file:line` and post once more. Do not retry further; report the error.
+8. **Post it.** `gh api repos/<owner>/<repo>/pulls/<n>/reviews --method POST --input <file>`. If GitHub answers 422, its error does not reliably say which comment failed, so move every inline comment into the summary body as `file:line` entries and post once more with an empty `comments` list. If that also fails, report the error and stop.
 9. **Do not ask first.** Posting the review on a PR you were asked to review is the deliverable.
 
 Local review files keep normal sentence case and include contested findings with their evidence; only the posted text uses the github voice.

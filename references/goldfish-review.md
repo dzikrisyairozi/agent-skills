@@ -99,7 +99,7 @@ Use the `goldfish-reviewer` persona when the harness supports personas. Otherwis
 4. Triage every finding (next section).
 5. Write the report.
 6. Apply the Fix decisions to the document.
-7. Rounds: one by default. Run a second round only if a Fix in the first round resolved a Blocker, and stop after it. Run more only if the user asks.
+7. Rounds: one by default. Run a second round only if a Fix in the first round resolved a Blocker; it re-runs only the lens that raised the Blocker, and stops after that. Run more only if the user asks.
 
 ## Triage
 

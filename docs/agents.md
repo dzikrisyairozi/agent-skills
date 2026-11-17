@@ -35,7 +35,8 @@ Pick this when you want one perspective on the current change and the user is in
 ### Slash command (single persona behind it)
 Pick this when there's a repeatable workflow you'd otherwise re-explain every time.
 
-- `/review` → wraps `code-reviewer` with the project's review skill
+- `/review` → wraps `code-reviewer` with the project's review skill, run in a fresh subagent
+- `/spec`, `/plan` → each fan out to two `goldfish-reviewer` instances with different lenses, then triage
 - `/test` → wraps `test-engineer` with TDD skill
 - `/webperf` → wraps `web-performance-auditor` for performance-focused audits on web apps
 

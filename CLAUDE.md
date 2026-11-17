@@ -12,7 +12,7 @@ agents/             → Reusable agent personas (code-reviewer, test-engineer, s
 .claude/commands/   → Claude Code commands (/spec, /plan, /build, /test, /review, /code-simplify, /ship, /webperf, /constraints, /quiz)
 commands/, .gemini/commands/ → generic + Gemini CLI mirrors of the same commands
 .claude-plugin/, .codex-plugin/, .agents/plugins/, .opencode/ → per-harness plugin manifests/surfaces
-references/         → Supplementary checklists (testing, performance, security, accessibility, observability, orchestration)
+references/         → Supplementary checklists (testing, performance, security, accessibility, observability, orchestration, goldfish review)
 docs/               → Setup guides per harness + skill-anatomy.md + cutover.md
 scripts/            → Validators (npm run validate) and their tests (npm test)
 spec/, tasks/       → This repo's own spec/plan artifacts — tracked here (not gitignored), see the T0.2 note in tasks/agent-skills-overhaul/plan.md

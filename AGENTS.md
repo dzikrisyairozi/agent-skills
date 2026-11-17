@@ -49,7 +49,7 @@ Skills are markdown-first: `skills/<kebab-case-name>/SKILL.md` with YAML frontma
 
 For the full format, naming conventions, and writing principles: `docs/skill-anatomy.md`. Don't restate that guidance here.
 
-**Every skill change must land on all three command surfaces if it touches a command** (`.claude/commands/*.md`, `commands/*.toml`, `.gemini/commands/*.toml`) — regenerate the TOML surfaces from the `.md` source rather than hand-editing them separately (see the generator used in the original overhaul, `tasks/agent-skills-overhaul/plan.md` Phase 3, or write the equivalent). `npm run validate` catches drift between the three.
+**Every skill change must land on all three command surfaces if it touches a command** (`.claude/commands/*.md`, `commands/*.toml`, `.gemini/commands/*.toml`) — edit all three in the same change. The TOML files wrap the `.md` body in `prompt = """ ... """`, so keep backslash escapes and JSON out of command bodies. No generator is checked in. `npm run validate` catches a missing surface or a drifted `description`, not a drifted prompt body, so diff the two TOML files before committing.
 
 ## Before Committing
 

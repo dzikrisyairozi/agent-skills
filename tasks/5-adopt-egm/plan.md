@@ -28,9 +28,10 @@ Add a fresh-context goldfish review to `/spec`, `/plan` and `/review`, make `/sp
 ## Constraints found in the code
 
 - `scripts/lib/skill-lint.js` requires these headings in every SKILL.md: `## Overview`, `## When to Use`, `## Common Rationalizations`, `## Red Flags`, `## Verification`. The description must contain "Use when".
-- `scripts/validate-artifact-paths.js` scans `.claude/commands/{spec,plan,build}.md` and the spec and planning skills for any path ending in `spec.md`, `plan.md` or `todo.md`, and fails on shapes other than `spec/<feature-name>/spec.md`, `tasks/<feature-name>/plan.md`, `tasks/<feature-name>/todo.md`. In those five files, do not write `tasks/<feature-name>/review/plan.md`. `goldfish.md` is not matched and is safe.
+- `scripts/validate-artifact-paths.js` scans seven files (`GUARDED_FILES`): `.claude/commands/{spec,plan,build}.md`, the spec and planning skills, `docs/getting-started.md` and `docs/adoption-guide.md`, for any path ending in `spec.md`, `plan.md` or `todo.md`, and fails on shapes other than `spec/<feature-name>/spec.md`, `tasks/<feature-name>/plan.md`, `tasks/<feature-name>/todo.md`. In those seven files, do not write `tasks/<feature-name>/review/plan.md`. `goldfish.md` is not matched and is safe.
+- `scripts/lib/skill-lint.js` treats "`X` persona" in a SKILL.md as a skill reference and warns when no skill `X` exists. Refer to a persona by its path (`agents/code-reviewer.md`) instead.
 - `scripts/validate-reference-links.js` resolves every `references/*.md` link in a SKILL.md relative to the skill's directory. Shared file: `../../references/goldfish-review.md`. Skill-local file: `references/writing-rules.md`.
-- `scripts/validate-commands.js` compares only the `description` field across the three surfaces. No description changes in this plan.
+- `scripts/validate-commands.js` checks that every command exists on all three surfaces and that the `description` field matches. Prompt bodies are not compared, so a drifted body passes. No description changes in this plan.
 - `scripts/validate-versions.js` checks `plugin.json`, `.codex-plugin/plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`. `package.json` also carries `0.1.0` and is bumped with them.
 
 ## File Boundary
@@ -44,6 +45,7 @@ Create:
 - `.opencode/skills/humanize/SKILL.md`
 - `.opencode/skills/humanize/references/writing-rules.md`
 - `tasks/5-adopt-egm/goldfish.md` (written by the T10 dogfood run)
+- `tasks/5-adopt-egm/review/plan.md`, `tasks/5-adopt-egm/review/todo.md` (written by `/review` in T10)
 
 Modify:
 
@@ -97,7 +99,7 @@ Delete: none.
 
 **Verification:**
 - [ ] `npm run validate` and `npm test` pass.
-- [ ] `grep -c "^### " references/goldfish-review.md` shows the four lens subsections; `grep -in "conversation" references/goldfish-review.md` shows only the prohibition lines.
+- [ ] `grep -c "^### Lens:" references/goldfish-review.md` returns 4; `grep -in "conversation" references/goldfish-review.md` shows only the prohibition lines.
 
 **Dependencies:** None
 
@@ -189,7 +191,7 @@ State: write the body to a temp file; add `--repo <owner>/<name>` when the URL n
 
 Add a Verification checkbox: "If an issue was given: title, body and labels updated, no label created."
 
-Commands, all three surfaces: add one paragraph at the end. "If the argument is a GitHub issue URL or `#<number>`, read the issue first as input, and after the spec is approved-ready follow the GitHub issue sync step of the skill to update its title, description and labels. Do not ask before editing the issue."
+Commands, all three surfaces: add one paragraph at the end. "If the argument is a GitHub issue URL or `#<number>`, read the issue first as input, and after the goldfish review follow the GitHub issue sync step of the skill to update its title, description and labels. Do not ask before editing the issue."
 
 Copy the skill to `.opencode`.
 
@@ -210,7 +212,7 @@ Copy the skill to `.opencode`.
 ### Checkpoint: /spec
 
 - [ ] `npm run validate` and `npm test` pass
-- [ ] Read `.claude/commands/spec.md` top to bottom: the order is questions, grounding, draft, save, goldfish, approval, issue sync
+- [ ] Read `.claude/commands/spec.md` top to bottom: the order is questions, grounding, draft, save, goldfish, issue sync, approval (re-sync if the spec changes during approval)
 
 ### Phase 3: /plan and /build
 
@@ -341,7 +343,7 @@ Copy the skill to `.opencode`.
 ### Checkpoint: /review
 
 - [ ] `npm run validate` and `npm test` pass
-- [ ] Read `.claude/commands/review.md` top to bottom: fresh-context review, five axes, ponytail, triage, then PR mode steps 1 and 2
+- [ ] Read `.claude/commands/review.md` top to bottom: fresh-context review and triage, five axes, ponytail, then PR mode steps 1 and 2
 
 ### Phase 5: docs, version, dogfood
 
@@ -349,7 +351,8 @@ Copy the skill to `.opencode`.
 
 **Description:**
 
-- `CLAUDE.md` and `AGENTS.md`: add `humanize` to the skills-by-phase list under Review, add `goldfish-reviewer` where personas are listed, and one line under Conventions: "Text posted to GitHub (issues, PR reviews) goes through `humanize` with github voice."
+- `CLAUDE.md`: add `humanize` to the **Review:** line of Skills by Phase, add `goldfish-reviewer` to the `agents/` line of Project Structure, and two lines at the end of Conventions (goldfish review in `/spec` and `/plan`; GitHub text goes through `humanize` with github voice).
+- `AGENTS.md` has no skills-by-phase list, persona list or Conventions section. Append "(text posted to GitHub goes through `humanize` with its github voice)" to the `REVIEW` line of Lifecycle Mapping; append one sentence about the two `goldfish-reviewer` instances to the paragraph ending "Do not build a \"router\" persona."; and replace the TOML-generator pointer in Adding or Changing a Skill (no generator exists) with "edit all three surfaces in the same change".
 - `README.md`: in the command table, update the `/spec`, `/plan` and `/review` rows to mention the goldfish review and, for `/review`, the inline PR review. Add one short paragraph "Elephant and goldfish" that says what the roles are and credits google/elephant-goldfish-model with a link. Update the `agents/*.md` line in the layout block to include `/spec` and `/plan`.
 - Version `0.1.0` to `0.2.0` in `package.json`, `plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`.
 
@@ -410,6 +413,7 @@ T1 and T2 are independent. After T1: T3, T5 and T7 touch different skills and di
 | `.opencode/skills` copy forgotten | Low | Re-copy is a step in every skill task; validator fails otherwise |
 | Skills grow long and cost context on every run | Medium | Protocol text is in one reference file, loaded only when the step runs |
 | The installed plugin in `~/.claude` still serves 0.1.0 until reinstalled | Low | Noted for the user; reinstall after merge |
+| Other callers pick up the changed skills: `/build auto` step 4 now runs the plan goldfish step; `/ship` and `doubt-driven-development` get the persona's Spec Drift section; `/review` inside a subagent cannot spawn one | Low | Intended for the first two. Spec Drift reports "no spec" when none is given. The nested case hits the skill's "fresh-context review not run" fallback |
 
 ## Open questions
 
