@@ -19,6 +19,10 @@ Never commit directly to `master`, `main`, or `develop`. Before the *first* comm
 3. If already on any other branch, treat it as the intended working branch and commit there — no new branch needed.
 4. **Do not push and do not open a pull request automatically.** A new local branch + local commits are safe and reversible; pushing and opening a PR touch shared state and require the user's explicit go-ahead. Note in the final summary that the work landed on a new local branch, and that pushing / opening a PR is available on request.
 
+## File Boundary
+
+If `tasks/<feature-name>/plan.md` has a File Boundary section, it lists every file this build may create, modify or delete. Before touching a file that is not on it, stop and ask, in both modes. If the user approves, add the path to the plan's File Boundary and continue; otherwise rescope the task. Task-status updates and files under `spec/` and `tasks/` are always allowed. A plan with no File Boundary section skips this check.
+
 ## Default: one task
 
 Pick the next pending task from the plan. Then:
@@ -46,6 +50,7 @@ Use this once a spec exists and you want to collapse plan + build into one run. 
 7. **Stop and ask the user** (do not push through) when:
    - a test can't be made to pass or the build breaks without an obvious fix → follow agent-skills:debugging-and-error-recovery
    - the spec is ambiguous, or a task needs a decision the spec doesn't cover
+   - a task needs a file outside the plan's File Boundary (see above)
    - a task is high-risk or irreversible — auth/permission changes, destructive data migrations, payments, deletions, deploys, anything touching secrets, **or anything you can't undo with `git revert`** → follow agent-skills:doubt-driven-development and get explicit sign-off before continuing
 
    After the user resolves a blocker, they re-invoke `/build auto` — it resumes from the next pending task.

@@ -14,8 +14,8 @@ Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
 
 ## Phase 3: /plan and /build
 - [x] T5 Planning skill: zero-decision rule, File Boundary in the template, Step 6 Goldfish review; three plan command files
-- [ ] T6 `/build` stops before editing a file outside the File Boundary; three build command files
-- [ ] Checkpoint: validators pass, TOML mirrors equal
+- [x] T6 `/build` stops before editing a file outside the File Boundary; three build command files
+- [x] Checkpoint: validators pass, TOML mirrors equal
 
 ## Phase 4: /review
 - [ ] T7 Review skill: Fresh-Context Review, Drift check, Triage; Spec Drift in `agents/code-reviewer.md`; three review command files

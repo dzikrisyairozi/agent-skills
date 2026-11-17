@@ -33,7 +33,7 @@ Add a fresh-context goldfish review to `/spec`, `/plan` and `/review`, make `/sp
 - `scripts/validate-commands.js` compares only the `description` field across the three surfaces. No description changes in this plan.
 - `scripts/validate-versions.js` checks `plugin.json`, `.codex-plugin/plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`. `package.json` also carries `0.1.0` and is bumped with them.
 
-## File boundary
+## File Boundary
 
 Create:
 
