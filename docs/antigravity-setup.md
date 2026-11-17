@@ -98,6 +98,7 @@ The plugin registers reusable subagent definitions from the `agents/` directory:
 - `code-reviewer.md`
 - `security-auditor.md`
 - `test-engineer.md`
+- `goldfish-reviewer.md` (fresh-context spec and plan review; `/spec` and `/plan` spawn two with different lenses)
 
 You can invoke these personas directly within your session or when delegating tasks using subagents.
 

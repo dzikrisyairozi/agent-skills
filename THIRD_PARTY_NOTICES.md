@@ -38,6 +38,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+The goldfish review in `references/goldfish-review.md` and
+`agents/goldfish-reviewer.md` follows the design of
+[google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model),
+Apache-2.0. Its lenses, triage categories and report shape are adapted from
+that project's reviewer personas and document standards; the text is
+rewritten for this repo, not copied.
+
 Everything else in this repository (the command customizations, plugin
 manifests, `spec/`, `tasks/`, and this repo's own documentation) is
 covered by the top-level `LICENSE` file.

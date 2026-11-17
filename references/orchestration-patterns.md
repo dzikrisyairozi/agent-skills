@@ -61,7 +61,7 @@ Multiple personas operate on the same input concurrently, each producing an inde
 - The merge step is small enough to stay in the main context
 - Wall-clock latency matters
 
-**Examples in this repo:** `/ship`.
+**Examples in this repo:** `/ship`, and the goldfish review in `/spec` and `/plan`. The goldfish variant runs one persona (`goldfish-reviewer`) twice with different lenses, gives each instance only the saved document and the repo (no conversation), and the merge step is a triage where every finding gets Fix, Contest, Escalate or Decline. See [goldfish-review.md](goldfish-review.md).
 
 **Cost:** N parallel sub-agent contexts + one merge turn. Higher than direct invocation, but faster wall-clock and produces better reports because each sub-agent stays focused on its single perspective.
 

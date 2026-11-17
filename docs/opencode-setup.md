@@ -117,6 +117,7 @@ Map the user's intent to the matching skill automatically:
 - Planning / breakdown → `planning-and-task-breakdown`
 - Bug / failure / unexpected behavior → `debugging-and-error-recovery`
 - Code review → `code-review-and-quality`
+- Issue text, PR comments, or "make this sound less like AI" → `humanize`
 - Refactoring / simplification → `code-simplification`
 - API or interface design → `api-and-interface-design`
 - UI work → `frontend-ui-engineering`
@@ -169,7 +170,7 @@ OpenCode does not require slash commands, but if you prefer them see the next se
 - PLAN → `planning-and-task-breakdown`
 - BUILD → `incremental-implementation` + `test-driven-development`
 - VERIFY → `debugging-and-error-recovery`
-- REVIEW → `code-review-and-quality`
+- REVIEW → `code-review-and-quality` (text posted to GitHub goes through `humanize`)
 - SHIP → `shipping-and-launch`
 
 ### Copy the optional slash commands

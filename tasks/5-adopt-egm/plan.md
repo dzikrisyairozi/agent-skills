@@ -58,6 +58,7 @@ Modify:
 - `.claude/commands/review.md`, `commands/review.toml`, `.gemini/commands/review.toml`
 - `agents/code-reviewer.md`
 - `docs/agents.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`
+- Added after goldfish escalations 9, 17, 20 and 21 (approved 2026-11-18): `skills/using-agent-skills/SKILL.md` and its `.opencode` copy, `docs/opencode-setup.md`, `docs/getting-started.md`, `docs/antigravity-setup.md`, `docs/copilot-setup.md`, `references/orchestration-patterns.md`, `THIRD_PARTY_NOTICES.md`
 - `package.json`, `plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`
 - `tasks/5-adopt-egm/todo.md` (task status)
 
