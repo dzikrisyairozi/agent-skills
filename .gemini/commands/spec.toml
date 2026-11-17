@@ -17,4 +17,6 @@ If code already exists in this area (not a greenfield project), ground the spec 
 Then generate a structured spec covering all six core areas: objective, commands, project structure, code style, testing strategy, and boundaries.
 
 Save the spec to `spec/<feature-name>/spec.md` (create the directory if needed), then run the Goldfish review step of the skill and ask for approval once `spec/<feature-name>/goldfish.md` is written. `<feature-name>` is a kebab-case slug reused across spec/plan/tasks for this feature; when the work has a GitHub issue, prefix it with the issue number — e.g. `spec/377-chat-surface-materials/spec.md`. Never write `SPEC.md` to the project root.
+
+If the argument is a GitHub issue URL or `#<number>`, read the issue first as requirements input, and after the goldfish review follow the GitHub issue sync step of the skill to update its title, description and labels. Do not ask before editing the issue.
 """
