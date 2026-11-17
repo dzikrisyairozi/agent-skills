@@ -155,7 +155,7 @@ Both skills add one line to their process: these commands write only spec and pl
 
 Order of work in every mode:
 
-1. **Goldfish code review.** Spawn the existing `code-reviewer` persona as a fresh subagent with the diff, the changed files, and `spec/<feature>/spec.md` plus `tasks/<feature>/plan.md` when they exist. It gets no conversation summary. This matters most when the session running `/review` is the one that ran `/build`.
+1. **Goldfish code review.** Spawn the existing `code-reviewer` persona as a fresh subagent with the diff, the changed files, and `spec/<feature>/spec.md` plus `tasks/<feature>/plan.md` when they exist. It gets no conversation summary. This matters most when the session running `/review` is the one that ran `/build`. If the harness cannot spawn a subagent, `/review` says "fresh-context review not run" and reviews in the main session. Unlike `/spec` and `/plan`, this fallback is allowed: the code is on disk either way, and a review is still needed to merge.
 2. **Drift check**, same subagent, only when a spec exists. Four categories: a feature the spec describes that the diff lacks; a model or type missing specified fields; a hardcoded value or stub where the spec describes real logic; a different pattern or dependency than the spec chose. Each drift finding says which side should change, spec or code, and leaves the choice to the user.
 3. **Triage** by the main session using 4.3. Code findings keep their labels; for triage, Critical counts as Blocker, Important (or the persona's Required) as Major, and Suggestion (or Optional, Nit) as Nit. A contested finding is dropped from what gets posted and kept with its evidence: in `tasks/<feature-name>/review/plan.md` on a PR, under "Contested" in the printed review in local mode.
 4. `/ponytail-review` add-on, unchanged.
@@ -247,6 +247,7 @@ commands/{spec,plan,review}.toml
 .gemini/commands/{spec,plan,review}.toml
 agents/code-reviewer.md                        # drift check in the output template
 docs/agents.md, README.md, AGENTS.md, CLAUDE.md  # list the new persona and skill
+skills/using-agent-skills/SKILL.md (+ .opencode copy), docs/{opencode-setup,getting-started,antigravity-setup,copilot-setup}.md, references/orchestration-patterns.md, THIRD_PARTY_NOTICES.md  # added after goldfish escalations
 package.json, plugin.json, .claude-plugin/plugin.json, .claude-plugin/marketplace.json, .codex-plugin/plugin.json  # 0.1.0 -> 0.2.0
 ```
 

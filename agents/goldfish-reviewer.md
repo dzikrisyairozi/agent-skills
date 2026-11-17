@@ -29,18 +29,7 @@ If the rubric is missing, read the `Lens: <name>` section of `references/goldfis
 
 ## Output
 
-For the `comprehension` lens, start with the paraphrase the rubric asks for.
-
-Then one entry per finding:
-
-```text
-Severity: Blocker | Major | Nit
-Location: <heading or line range>
-Problem: <what is wrong, specifically>
-Why: <what goes wrong for a reader or implementer if it stays>
-```
-
-If you find nothing, return `no findings`.
+Use the report format in the spawn prompt of `references/goldfish-review.md`: the paraphrase first for the `comprehension` lens, then one entry per finding with severity, location, problem and why. If you find nothing, return `no findings`.
 
 ## Composition
 

@@ -225,15 +225,15 @@ Each drift finding says which side should change, the spec or the code. The user
 
 ### Triage
 
-The main session triages the subagent's findings with the rules in [../../references/goldfish-review.md](../../references/goldfish-review.md): Fix, Contest, Escalate or Decline, and a contest must cite something the reviewer could read. Code findings keep their code-review labels (Critical, Important, Suggestion; Required from `agents/code-reviewer.md` counts as Important, and its Optional and Nit as Suggestion); for triage, Critical counts as Blocker, Important as Major, and Suggestion as Nit, so only a Suggestion can be declined. A contested finding is not posted to the PR. On a PR it stays in `tasks/<feature-name>/review/plan.md` with its evidence; in local mode it is listed under "Contested" at the end of the review output, with its evidence.
+The main session triages the subagent's findings with the rules in [../../references/goldfish-review.md](../../references/goldfish-review.md): Fix, Contest, Escalate or Decline, and a contest must cite something the reviewer could read. Code findings keep their code-review labels (Critical, Important, Suggestion; Required from `agents/code-reviewer.md` counts as Important, and its Optional and Nit as Suggestion); for triage, Critical counts as Blocker, Important as Major, and Suggestion as Nit, so only a Suggestion can be declined. A contested finding is not posted to the PR. On a PR it stays in `tasks/<feature-name>/review/plan.md` with its evidence; in local mode it is listed under "Contested" at the end of the review output, with its evidence. An escalated finding is posted like any other and listed first in the chat reply, so the user can decide there. A drift finding is an Escalate by default: post it inline when it maps to a diff line, otherwise in the summary body, with the note on whether the spec or the code should change.
 
 ## Posting a PR Review
 
 When the review target is a pull request, post one GitHub review with inline comments, not a single long comment. Inline comments sit on the exact lines, carry suggested changes the author can apply from the GitHub UI, and resolve as threads.
 
 1. **Find the PR.** Take owner, repo and number from the PR URL. For `#<n>`, get the repo from `gh repo view --json nameWithOwner`.
-2. **Find the commentable lines.** Run `gh api repos/<owner>/<repo>/pulls/<n>/files --paginate`. In each file's `patch`, every hunk header `@@ -a,b +c,d @@` makes lines `c` through `c+d-1` of the new file commentable. A file with no `patch` (binary, or too large) has no commentable lines.
-3. **Map findings to lines.** Each finding on a commentable line becomes an inline comment: `path`, `line`, `side: "RIGHT"`, and `start_line` plus `start_side` when it spans several lines. A finding on any other line goes in the summary body as `file:line`.
+2. **Find the commentable lines.** Run `gh api repos/<owner>/<repo>/pulls/<n>/files --paginate`. In each file's `patch`, every hunk header `@@ -a,b +c,d @@` makes lines `c` through `c+d-1` of the new file commentable (a header without `,d` means `d` is 1). A file with no `patch` (binary, or too large) has no commentable lines.
+3. **Map findings to lines.** Each finding on a commentable line becomes an inline comment: `path`, `line`, `side: "RIGHT"`, and `start_line` plus `start_side` when it spans several lines. `start_line` and `line` must fall in the same hunk; if they do not, comment on `line` alone. A finding on any other line goes in the summary body as `file:line`.
 4. **Write the comment.** Say what is wrong and what to do. Add a `suggestion` block only when the fix is an exact replacement for the commented lines; GitHub applies it as is. Otherwise describe the change and show a short code block.
 5. **Write the summary body.** Verdict first, then counts by severity, then the findings that could not go inline, then the `/ponytail-review` section. No headings when the review is short.
 6. **Humanize.** Run every body, summary and inline, through the `humanize` skill with its github voice: lowercase sentence starts, identifiers in their real casing. Code and `suggestion` blocks are not touched.
@@ -258,32 +258,6 @@ When the review target is a pull request, post one GitHub review with inline com
 9. **Do not ask first.** Posting the review on a PR you were asked to review is the deliverable.
 
 Local review files keep normal sentence case and include contested findings with their evidence; only the posted text uses the github voice.
-
-## Multi-Model Review Pattern
-
-Use different models for different review perspectives:
-
-```
-Model A writes the code
-    │
-    ▼
-Model B reviews for correctness and architecture
-    │
-    ▼
-Model A addresses the feedback
-    │
-    ▼
-Human makes the final call
-```
-
-This catches issues that a single model might miss — different models have different blind spots.
-
-**Example prompt for a review agent:**
-```
-Review this code change for correctness, security, and adherence to
-our project conventions. The spec says [X]. The change should [Y].
-Flag any issues as Critical, Required, Optional, or Nit.
-```
 
 ## Dead Code Hygiene
 

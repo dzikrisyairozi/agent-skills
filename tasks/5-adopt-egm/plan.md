@@ -318,7 +318,7 @@ Copy the skill to `.opencode`.
 4. Include the JSON example from spec 4.6.
 5. A `suggestion` block only when the fix is an exact replacement of the commented lines. Otherwise describe the change and show a short code block.
 6. A finding on a line outside the diff goes in the summary body with its `file:line`.
-7. Post: `gh api repos/<owner>/<repo>/pulls/<n>/reviews --method POST --input <file>`. On a 422, move the rejected comment into the body and post once more.
+7. Post: `gh api repos/<owner>/<repo>/pulls/<n>/reviews --method POST --input <file>`. On a 422, move every inline comment into the body and post once more; on a second failure, report it.
 8. Summary body: verdict first, counts by severity, findings that could not be inline, the ponytail section.
 9. Every body goes through the `humanize` skill with github voice before the JSON is written. Code and suggestion blocks are untouched.
 

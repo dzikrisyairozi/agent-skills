@@ -73,23 +73,15 @@ Also readable: <repo-relative paths the document cites; for /plan, the spec>
 Rubric:
 <the "Lens: ..." subsection of references/goldfish-review.md, pasted in full>
 
-Report each finding as: severity (Blocker, Major or Nit), location (heading or
-line range), the problem, and why it matters. For the comprehension lens, put
+Report each finding as: severity, location (heading or line range), the problem,
+and why it matters. Severity is Blocker (the document is wrong or cannot be acted
+on), Major (a real gap that will cause rework) or Nit (wording or polish). For the comprehension lens, put
 the paraphrase first. If you find nothing, say "no findings".
 ```
 
 The prompt must not include a summary of the conversation, what the author intended, which parts the author is unsure about, or what findings to expect. Any of those turns the goldfish back into the elephant.
 
 Use the `goldfish-reviewer` persona when the harness supports personas. Otherwise send the same prompt to a general-purpose subagent.
-
-## Finding format
-
-| Field | Content |
-|---|---|
-| Severity | Blocker (the document is wrong or cannot be acted on), Major (a real gap that will cause rework), Nit (wording or polish) |
-| Location | Heading, or line range |
-| Problem | What is wrong, specifically |
-| Why | What goes wrong for a reader or implementer if it stays |
 
 ## Flow
 

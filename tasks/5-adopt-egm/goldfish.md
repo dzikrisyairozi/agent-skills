@@ -9,7 +9,7 @@ Run on 2026-11-18, after T1 to T9 were built, so reviewers compared the plan wit
 | readiness | completed |
 | codebase | completed |
 
-Counts: 2 Blocker, 8 Major, 8 Nit (18 entries; some bundle points both reviewers raised). Decisions by entry: 10 Fix, 3 Contest, 3 Escalate, and 2 mixed (15 is Fix and Contest; 18 is Fix, Contest and Decline).
+Counts: 2 Blocker, 8 Major, 11 Nit (21 entries; some bundle points both reviewers raised). Decisions: 12 Fix, 5 Contest, 3 Escalate, 1 Decline.
 
 ## Findings
 
@@ -114,12 +114,17 @@ Counts: 2 Blocker, 8 Major, 8 Nit (18 entries; some bundle points both reviewers
 - Decision: Contest
 - Evidence: the shipped Verification in `skills/humanize/SKILL.md` reads "No placeholder (`[needs a fact: ...]` aside, which is deliberate)".
 
-### 15. README layout count and humanize mention (Nit)
+### 15a. README never names humanize (Nit)
 
-- Lens: readiness and codebase
-- Problem: "25 skill definitions" is stale; README never names `humanize`.
-- Decision: Fix for the mention, Contest for the count
-- Evidence and edit: `README.md` already says "26 skill definitions" (T9). Added one sentence to "Elephant and goldfish" naming `humanize`.
+- Lens: codebase
+- Decision: Fix
+- Edit: added one sentence to "Elephant and goldfish" naming `humanize`.
+
+### 15b. README skill count is stale (Nit)
+
+- Lens: readiness
+- Decision: Contest
+- Evidence: `README.md` already says "26 skill definitions" (T9).
 
 ### 16. /review checkpoint order and docs/agents.md command list (Nit)
 
@@ -133,11 +138,23 @@ Counts: 2 Blocker, 8 Major, 8 Nit (18 entries; some bundle points both reviewers
 - Decision: Escalate
 - Why escalate: the file is outside the File Boundary. EGM is credited, with a link and its license, in `references/goldfish-review.md`, `README.md` and `CLAUDE.md`; its text was rewritten, not copied. Whether a notice entry is still wanted is the owner's call.
 
-### 18. Remaining readiness nits (Nit)
+### 18a. Rule count, missing tools allowlist, commit count (Nit)
 
 - Lens: readiness
-- Points: "four rules" in Task 1 vs three in spec 4.3; persona has no `tools:` allowlist; File Boundary omits `tasks/5-adopt-egm/review/*`; labels were not recorded before the issue re-sync; "File boundary" vs "File Boundary" casing; commit count in the foundation checkpoint.
-- Decision: Decline for the rule count, allowlist and commit count. Fix for the File Boundary (review files added). Contest for the rest: issue #5 labels were read as `["enhancement"]` before the re-sync (10 labels in the repo before and after), and the shipped rubric in `references/goldfish-review.md` says "File Boundary".
+- Points: "four rules" in Task 1 vs three in spec 4.3; persona has no `tools:` allowlist; commit count in the foundation checkpoint.
+- Decision: Decline
+
+### 18b. File Boundary omits the review files (Nit)
+
+- Lens: readiness
+- Decision: Fix
+- Edit: `tasks/5-adopt-egm/review/plan.md` and `todo.md` added to the File Boundary.
+
+### 18c. Labels not recorded before the re-sync; "File boundary" casing (Nit)
+
+- Lens: readiness
+- Decision: Contest
+- Evidence: issue #5 labels were read as `["enhancement"]` before the re-sync (10 labels in the repo before and after), and the shipped rubric in `references/goldfish-review.md` says "File Boundary".
 
 ## Round 2
 

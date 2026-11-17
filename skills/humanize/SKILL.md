@@ -35,13 +35,13 @@ The rules live in [references/writing-rules.md](references/writing-rules.md). Re
 2. Scan for the mechanical tells first, so nothing gets missed: em dashes, the word list, ", highlighting/ensuring/reflecting/showcasing" tails, "not just", "rather than", "it's not X, it's Y", Title Case headings, bold-label bullets, emoji bullets, closing summary paragraphs. Use grep on files and a careful read on pasted text.
 3. Read the whole text for the deeper problem: vague, inflated claims where a specific fact should be. This matters more than the word list.
 4. Rewrite. Keep every fact, number, name, link and meaning. Keep the author's voice and register; a casual note stays casual.
-5. Do not make up specifics to replace vague ones. If a sentence only says "plays a pivotal role" and the actual role is unknown, cut it or mark it `[needs a fact: what does it do?]`.
+5. Do not make up specifics to replace vague ones. If a sentence only says "plays a pivotal role" and the actual role is unknown, cut it or mark it `[needs a fact: what does it do?]`. In text a command posts without a human reading it first, cut the claim; never post the marker.
 6. Do not overcorrect. Leave normal human texture alone ("very", "perhaps", plain wordy phrases, true superlatives). Vary sentence length instead of flattening everything into short sentences.
 7. For non-English text, apply the structural rules (puffery, tacked-on analysis, triples, parallelisms, formatting) and skip the English word list.
 
 ## Github Voice
 
-When the target is an issue title, issue body, PR review summary or inline review comment, apply the "Github voice" section of `references/writing-rules.md` after the pass above: lowercase sentence starts, identifiers and proper nouns in their real casing, second person, one point per comment, severity in words.
+When the target is an issue title, issue body, PR review summary or inline review comment, apply the "Github voice" section of `references/writing-rules.md` after the pass above.
 
 Code blocks and `suggestion` blocks are never changed. Text that stays local (specs, plans, `goldfish.md`, `tasks/<feature-name>/review/` notes) keeps normal sentence case.
 
