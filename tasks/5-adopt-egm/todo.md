@@ -1,0 +1,28 @@
+# Todo: adopt the elephant-goldfish model
+
+Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
+
+## Phase 1: foundation
+- [x] T1 Goldfish reference (`references/goldfish-review.md`), persona (`agents/goldfish-reviewer.md`), row in `docs/agents.md`
+- [x] T2 `skills/humanize/` with `references/writing-rules.md` and github voice, plus `.opencode` copy
+- [x] Checkpoint: `npm run validate` and `npm test` pass
+
+## Phase 2: /spec
+- [x] T3 Spec skill: Non-goals, Alternatives Considered, Risks in the template; Goldfish review step; three spec command files
+- [x] T4 Spec skill: GitHub issue sync step; three spec command files
+- [x] Checkpoint: validators pass, `commands/spec.toml` equals `.gemini/commands/spec.toml`
+
+## Phase 3: /plan and /build
+- [x] T5 Planning skill: zero-decision rule, File Boundary in the template, Step 6 Goldfish review; three plan command files
+- [x] T6 `/build` stops before editing a file outside the File Boundary; three build command files
+- [x] Checkpoint: validators pass, TOML mirrors equal
+
+## Phase 4: /review
+- [x] T7 Review skill: Fresh-Context Review, Drift check, Triage; Spec Drift in `agents/code-reviewer.md`; three review command files
+- [x] T8 Review skill: Posting a PR Review (inline review, event COMMENT, lowercase); replace `gh pr comment` in three review command files
+- [x] Checkpoint: validators pass, no `gh pr comment` left in command files
+
+## Phase 5: docs, version, dogfood
+- [x] T9 `CLAUDE.md`, `AGENTS.md`, `README.md`; version 0.2.0 in six JSON files
+- [x] T10 Dogfood: goldfish on plan and spec, issue sync, push, PR, `/review`: goldfish on this plan, issue sync on #5, then ASK FIRST to push, open the PR and run `/review` on it
+- [ ] Checkpoint: spec section 13 criteria all checked, `/quiz` gate passed

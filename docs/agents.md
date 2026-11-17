@@ -8,6 +8,7 @@ Specialist personas that play a single role with a single perspective. Each pers
 | [security-auditor](../agents/security-auditor.md) | Security Engineer | Vulnerability detection, OWASP-style audit |
 | [test-engineer](../agents/test-engineer.md) | QA Engineer | Test strategy, coverage analysis, Prove-It pattern |
 | [web-performance-auditor](../agents/web-performance-auditor.md) | Web Performance Engineer | Core Web Vitals audit, loading/rendering/network analysis |
+| [goldfish-reviewer](../agents/goldfish-reviewer.md) | Fresh-context document reviewer | Spec and plan review inside `/spec` and `/plan`, one lens per instance |
 
 ## How personas relate to skills and commands
 
@@ -34,7 +35,8 @@ Pick this when you want one perspective on the current change and the user is in
 ### Slash command (single persona behind it)
 Pick this when there's a repeatable workflow you'd otherwise re-explain every time.
 
-- `/review` → wraps `code-reviewer` with the project's review skill
+- `/review` → wraps `code-reviewer` with the project's review skill, run in a fresh subagent
+- `/spec`, `/plan` → each fan out to two `goldfish-reviewer` instances with different lenses, then triage
 - `/test` → wraps `test-engineer` with TDD skill
 - `/webperf` → wraps `web-performance-auditor` for performance-focused audits on web apps
 

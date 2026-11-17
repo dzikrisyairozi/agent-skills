@@ -8,6 +8,8 @@ Invoke the agent-skills:code-review-and-quality skill.
 
 If an argument is a GitHub PR URL or `#<number>`, review that PR (`gh pr diff <n>`) and follow **PR mode** below. Otherwise review the current changes (staged or recent commits).
 
+Run the review through the Fresh-Context Review section of the skill: the `code-reviewer` persona in a fresh subagent, given the diff plus `spec/<feature-name>/spec.md` and the feature's plan when they exist (derive `<feature-name>` from the branch name), with the drift check. Then triage its findings before reporting.
+
 Review across all five axes:
 
 1. **Correctness** — Does it match the spec? Edge cases handled? Tests adequate?
@@ -25,23 +27,17 @@ Output a structured review with specific file:line references and fix recommenda
 
 ## PR mode
 
-When the review target is a pull request, the review is not finished until **both** artifacts exist. Do not skip either, and do not ask for permission first — posting a review comment on a PR you were asked to review is the requested deliverable.
+When the review target is a pull request, the review is not finished until **both** artifacts exist. Do not skip either, and do not ask for permission first — posting the review on a PR you were asked to review is the requested deliverable.
 
-### 1. Post the review as a PR comment
+### 1. Post the review on the PR
 
-```bash
-gh pr comment <number> --body-file <path-to-review.md>
-```
-
-Write the body to a temp file first (scratchpad dir) rather than passing a long `--body` inline. The comment carries the full five-axis review plus the `/ponytail-review` add-on section, with `file:line` references. Lead with a one-line verdict (e.g. `**Verdict:** approve with 2 Important follow-ups`) and a findings count by severity, so a reader gets the summary without scrolling.
-
-Prose in the PR comment is written normally — it persists outside the chat and is read by humans other than the requester.
+Follow the Posting a PR Review section of the skill: one GitHub review with event `COMMENT`, a short summary body with the verdict and counts, and an inline comment on each finding that maps to a line in the diff, with a `suggestion` block when the fix is an exact replacement. All posted prose goes through the `humanize` skill's github voice, so it is lowercase with identifiers in their real casing. Do not ask before posting.
 
 ### 2. Save an actionable plan under `tasks/<feature>/review/`
 
 Derive `<feature>` from the PR's branch slug — reuse the existing `tasks/<feature>/` directory when the branch was built from one (e.g. branch `feat/3-6-m0-dashboard-foundation` → `tasks/3-6-m0-dashboard-foundation/review/`). Create the directory if needed.
 
-Write two files there, in the same shape `/plan` produces:
+Write two files there, in the same shape `/plan` produces. These local files keep normal sentence case, and they include contested findings with their evidence:
 
 - `review/plan.md` — the findings converted into remediation work: phases ordered by severity (Critical → Important → Suggestion), each task vertically sliced with acceptance criteria, verification steps, and the files it touches. Include a header linking back to the PR URL and noting which findings were accepted vs. deliberately declined.
 - `review/todo.md` — the flat checkbox task list, one line per remediation task, mirroring `plan.md`'s ordering.

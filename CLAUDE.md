@@ -8,11 +8,11 @@ This is a personal, harness-agnostic engineering-skills pack — forked from [ad
 
 ```
 skills/            → Core skills (SKILL.md per directory)
-agents/             → Reusable agent personas (code-reviewer, test-engineer, security-auditor, web-performance-auditor)
+agents/             → Reusable agent personas (code-reviewer, test-engineer, security-auditor, web-performance-auditor, goldfish-reviewer)
 .claude/commands/   → Claude Code commands (/spec, /plan, /build, /test, /review, /code-simplify, /ship, /webperf, /constraints, /quiz)
 commands/, .gemini/commands/ → generic + Gemini CLI mirrors of the same commands
 .claude-plugin/, .codex-plugin/, .agents/plugins/, .opencode/ → per-harness plugin manifests/surfaces
-references/         → Supplementary checklists (testing, performance, security, accessibility, observability, orchestration)
+references/         → Supplementary checklists (testing, performance, security, accessibility, observability, orchestration, goldfish review)
 docs/               → Setup guides per harness + skill-anatomy.md + cutover.md
 scripts/            → Validators (npm run validate) and their tests (npm test)
 spec/, tasks/       → This repo's own spec/plan artifacts — tracked here (not gitignored), see the T0.2 note in tasks/agent-skills-overhaul/plan.md
@@ -24,7 +24,7 @@ spec/, tasks/       → This repo's own spec/plan artifacts — tracked here (no
 **Plan:** planning-and-task-breakdown, constraint-driven-development
 **Build:** incremental-implementation, test-driven-development, context-engineering, source-driven-development, doubt-driven-development, frontend-ui-engineering, api-and-interface-design
 **Verify:** browser-testing-with-devtools, debugging-and-error-recovery
-**Review:** code-review-and-quality, code-simplification, security-and-hardening, performance-optimization
+**Review:** code-review-and-quality, code-simplification, security-and-hardening, performance-optimization, humanize
 **Ship:** git-workflow-and-versioning, ci-cd-and-automation, deprecation-and-migration, documentation-and-adrs, observability-and-instrumentation, shipping-and-launch
 
 ## Conventions
@@ -34,6 +34,8 @@ spec/, tasks/       → This repo's own spec/plan artifacts — tracked here (no
 - Shared references live in root `references/`; a skill's own references live in `skills/<name>/references/`.
 - **Path convention (the reason this fork exists):** specs at `spec/<feature-name>/spec.md`, plans at `tasks/<feature-name>/plan.md`, task lists at `tasks/<feature-name>/todo.md`, review remediation at `tasks/<feature-name>/review/{plan,todo}.md`. Never write these at the top level (`SPEC.md`, `tasks/plan.md`) — `SPEC.md`/`docs/SPEC.md` are recognized only as legacy fallback locations `/build` still checks.
 - Every skill change that touches a command must update all three surfaces: `.claude/commands/*.md`, `commands/*.toml`, `.gemini/commands/*.toml`.
+- `/spec` and `/plan` run a goldfish review (fresh subagents, no conversation context) before asking for approval; the protocol is `references/goldfish-review.md`, adapted from [google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model).
+- Text posted to GitHub (issue edits from `/spec`, PR reviews from `/review`) goes through the `humanize` skill with its github voice.
 
 ## Commands
 

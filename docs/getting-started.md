@@ -61,6 +61,7 @@ For comprehensive coverage, load skills by phase:
 Starting a project:  spec-driven-development → planning-and-task-breakdown
 During development:  incremental-implementation + test-driven-development
 Before merge:        code-review-and-quality + security-and-hardening
+GitHub text:         humanize (issue edits, PR reviews)
 Before deploy:       shipping-and-launch
 ```
 
@@ -99,6 +100,7 @@ The `agents/` directory contains pre-configured agent personas:
 | `test-engineer.md` | Test strategy and writing |
 | `security-auditor.md` | Vulnerability detection |
 | `web-performance-auditor.md` | Core Web Vitals & performance audit (via `/webperf`) |
+| `goldfish-reviewer.md` | Fresh-context spec and plan review, one lens per instance (via `/spec` and `/plan`) |
 
 Load an agent definition when you need specialized review. For example, ask your coding agent to "review this change using the code-reviewer agent persona" and provide the agent definition.
 

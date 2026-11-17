@@ -77,6 +77,10 @@ Categorize every finding, using the same severity labels as the `code-review-and
 ### Nits
 - [File:line] [Description]
 
+### Spec Drift
+- [Missing feature | Incomplete model | Shortcut | Different approach] [File:line] [What the spec says, what the code does, which side should change]
+- Or: "no drift found", or "no spec"
+
 ### What's Done Well
 - [Positive observation — always include at least one]
 
@@ -94,6 +98,7 @@ Categorize every finding, using the same severity labels as the `code-review-and
 4. Don't approve code with Critical issues
 5. Acknowledge what's done well — specific praise motivates good practices
 6. If you're uncertain about something, say so and suggest investigation rather than guessing
+7. When given a spec, check the diff against it in the four drift categories of the `code-review-and-quality` skill
 
 ## Composition
 

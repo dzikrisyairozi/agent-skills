@@ -30,12 +30,14 @@ mkdir -p .github/agents
 cp /path/to/agent-skills/agents/code-reviewer.md .github/agents/code-reviewer.agent.md
 cp /path/to/agent-skills/agents/test-engineer.md .github/agents/test-engineer.agent.md
 cp /path/to/agent-skills/agents/security-auditor.md .github/agents/security-auditor.agent.md
+cp /path/to/agent-skills/agents/goldfish-reviewer.md .github/agents/goldfish-reviewer.agent.md
 ```
 
 Invoke agents in Copilot Chat:
 - `@code-reviewer Review this PR`
 - `@test-engineer Analyze test coverage for this module`
 - `@security-auditor Check this endpoint for vulnerabilities`
+- `@goldfish-reviewer Lens: readiness. Document: tasks/my-feature/plan.md`
 
 ### Custom Instructions (User Level)
 
