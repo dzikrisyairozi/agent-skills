@@ -202,6 +202,31 @@ Check the author's verification story:
 - Is there a before/after comparison?
 ```
 
+## Fresh-Context Review
+
+The session that built a change also holds every assumption behind it, so it tends to approve what it meant instead of what it wrote. Run the review in a fresh context.
+
+1. Spawn the code reviewer persona (`agents/code-reviewer.md`) as a subagent. Give it the diff, the changed files, and the feature's spec (`spec/<feature-name>/spec.md`) and plan when they exist. Derive `<feature-name>` from the branch name (`feat/5-adopt-egm` gives `5-adopt-egm`).
+2. Do not give it a summary of the conversation, what the author intended, or which parts you are unsure of.
+3. If the harness cannot spawn a subagent, write "fresh-context review not run" at the top of the output and review in the main session.
+
+### Drift Check
+
+Only when a spec exists. The reviewer compares the diff with the spec and reports each mismatch in one of four categories:
+
+| Category | Example |
+|---|---|
+| Missing feature | The spec describes a retry on 422; the diff posts once and gives up |
+| Incomplete model | The spec's `Session` has `expiresAt`; the type in the diff does not |
+| Shortcut | The spec says labels come from `gh label list`; the code hardcodes `["enhancement"]` |
+| Different approach | The spec chose one GitHub review via `gh api`; the diff posts separate `gh pr comment` calls |
+
+Each drift finding says which side should change, the spec or the code. The user decides. Report "no drift found" when the diff matches, and "no spec" when there is none.
+
+### Triage
+
+The main session triages the subagent's findings with the rules in [../../references/goldfish-review.md](../../references/goldfish-review.md): Fix, Contest, Escalate or Decline, and a contest must cite something the reviewer could read. A contested finding is not posted to the PR. It stays in the local review file with its evidence, so a later reader can check the call.
+
 ## Multi-Model Review Pattern
 
 Use different models for different review perspectives:
@@ -368,6 +393,7 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 ## Red Flags
 
 - PRs merged without any review
+- Reviewing a diff in the same session that wrote it, with no fresh-context pass
 - Review that only checks if tests pass (ignoring other axes)
 - "LGTM" without evidence of actual review
 - Security-sensitive changes without security-focused review
@@ -391,6 +417,8 @@ After review is complete:
 - [ ] Tests pass
 - [ ] Build succeeds
 - [ ] The verification story is documented (what changed, how it was verified)
+- [ ] The fresh-context review ran, or the output says it did not
+- [ ] When a spec exists, drift was checked and reported (or "no drift found")
 - [ ] Dependency upgrades were reviewed against their changelog, isolated per package, and verified by a green suite with the lockfile diff reviewed
 
 **Presumptive blockers:** surface and propose the simpler design for each of these; escalate to Required only when the change actively makes structure worse: a refactor that relocates complexity instead of reducing it; a change that pushes a file past the size boundary with no decomposition; feature logic added to a shared module; a near-duplicate of an existing canonical helper; a silent fallback that hides an unclear invariant.

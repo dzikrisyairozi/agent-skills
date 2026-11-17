@@ -7,6 +7,8 @@ Invoke the agent-skills:code-review-and-quality skill.
 
 If an argument is a GitHub PR URL or `#<number>`, review that PR (`gh pr diff <n>`) and follow **PR mode** below. Otherwise review the current changes (staged or recent commits).
 
+Run the review through the Fresh-Context Review section of the skill: the `code-reviewer` persona in a fresh subagent, given the diff plus `spec/<feature-name>/spec.md` and the feature's plan when they exist (derive `<feature-name>` from the branch name), with the drift check. Then triage its findings before reporting.
+
 Review across all five axes:
 
 1. **Correctness** — Does it match the spec? Edge cases handled? Tests adequate?

@@ -18,7 +18,7 @@ Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
 - [x] Checkpoint: validators pass, TOML mirrors equal
 
 ## Phase 4: /review
-- [ ] T7 Review skill: Fresh-Context Review, Drift check, Triage; Spec Drift in `agents/code-reviewer.md`; three review command files
+- [x] T7 Review skill: Fresh-Context Review, Drift check, Triage; Spec Drift in `agents/code-reviewer.md`; three review command files
 - [ ] T8 Review skill: Posting a PR Review (inline review, event COMMENT, lowercase); replace `gh pr comment` in three review command files
 - [ ] Checkpoint: validators pass, no `gh pr comment` left in command files
 
