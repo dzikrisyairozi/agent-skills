@@ -8,7 +8,7 @@ Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
 - [x] Checkpoint: `npm run validate` and `npm test` pass
 
 ## Phase 2: /spec
-- [ ] T3 Spec skill: Non-goals, Alternatives Considered, Risks in the template; Goldfish review step; three spec command files
+- [x] T3 Spec skill: Non-goals, Alternatives Considered, Risks in the template; Goldfish review step; three spec command files
 - [ ] T4 Spec skill: GitHub issue sync step; three spec command files
 - [ ] Checkpoint: validators pass, `commands/spec.toml` equals `.gemini/commands/spec.toml`
 

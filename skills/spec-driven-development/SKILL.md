@@ -140,6 +140,15 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 - Ask first: [...]
 - Never: [...]
 
+## Non-goals
+[What this will deliberately not do]
+
+## Alternatives Considered
+[Each rejected option and the concrete reason it lost: complexity, cost, a conflict with an existing convention]
+
+## Risks
+[What could go wrong, and the mitigation for each]
+
 ## Success Criteria
 [How we'll know this is done — specific, testable conditions]
 
@@ -160,6 +169,15 @@ REFRAMED SUCCESS CRITERIA:
 ```
 
 This lets you loop, retry, and problem-solve toward a clear goal rather than guessing what "faster" means.
+
+### Goldfish review
+
+Once the draft is saved, and before asking for approval, run the protocol in [../../references/goldfish-review.md](../../references/goldfish-review.md) with the `comprehension` and `zoom-out` lenses. Two fresh subagents read the saved spec and the repo, without this conversation, in parallel. Triage every finding, apply the fixes, and write the report to `spec/<feature-name>/goldfish.md`.
+
+At the approval prompt, show what the reference's "What to show in chat" section lists: escalations first, then the comprehension paraphrase, then counts and the report path. The paraphrase is the fastest way for the human to see whether the spec says what they meant.
+
+- This phase writes spec artifacts only (`spec/<feature-name>/`), never source files.
+- If a new request contradicts the saved spec, name the contradiction and ask which one wins before editing any file.
 
 ### Phase 2: Plan
 
@@ -218,6 +236,7 @@ The spec is a living document, not a one-time artifact:
 | "I'll write the spec after I code it" | That's documentation, not specification. The spec's value is in forcing clarity *before* code. |
 | "The spec will slow us down" | A 15-minute spec prevents hours of rework. Waterfall in 15 minutes beats debugging in 15 hours. |
 | "Requirements will change anyway" | That's why the spec is a living document. An outdated spec is still better than no spec. |
+| "I wrote it, so I know it's clear" | The author fills gaps from memory and cannot see what the page leaves out. That is what the goldfish review is for. |
 | "The user knows what they want" | Even clear requests have implicit assumptions. The spec surfaces those assumptions. |
 | "It's one big feature; splitting it is overhead" | If acceptance criteria cluster into independently testable groups, a monolithic spec forces every downstream task to reason over the whole contract. A ten-line capability map is the cheap alternative. |
 | "I'll decompose during planning" | Planning slices tasks within a spec. By then the oversized artifact already exists — module boundaries and dependency direction must be decided before the spec is written, not after. |
@@ -229,6 +248,8 @@ The spec is a living document, not a one-time artifact:
 - Implementing features not mentioned in any spec or task list
 - Making architectural decisions without documenting them
 - Skipping the spec because "it's obvious what to build"
+- Asking for approval before `spec/<feature-name>/goldfish.md` exists
+- Running the goldfish rubrics in the main session and calling it a goldfish review
 - One spec whose requirements span several independently testable capabilities
 - Module boundaries or build order decided implicitly during implementation because no capability map was approved up front
 
@@ -241,5 +262,7 @@ Before proceeding to implementation, confirm:
 - [ ] Success criteria are specific and testable
 - [ ] Boundaries (Always/Ask First/Never) are defined
 - [ ] The spec is saved to a file in the repository
+- [ ] The spec has Non-goals, Alternatives Considered and Risks
+- [ ] The goldfish report is written, and every finding has a decision (Fix, Contest, Escalate or Decline)
 - [ ] If the request bundles several independently testable capabilities, a capability map (module ids, dependency direction, build order) was approved before any module spec was written
 - [ ] Every module spec traces to a module id in the approved map
