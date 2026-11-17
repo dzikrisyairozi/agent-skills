@@ -19,8 +19,8 @@ Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
 
 ## Phase 4: /review
 - [x] T7 Review skill: Fresh-Context Review, Drift check, Triage; Spec Drift in `agents/code-reviewer.md`; three review command files
-- [ ] T8 Review skill: Posting a PR Review (inline review, event COMMENT, lowercase); replace `gh pr comment` in three review command files
-- [ ] Checkpoint: validators pass, no `gh pr comment` left in command files
+- [x] T8 Review skill: Posting a PR Review (inline review, event COMMENT, lowercase); replace `gh pr comment` in three review command files
+- [x] Checkpoint: validators pass, no `gh pr comment` left in command files
 
 ## Phase 5: docs, version, dogfood
 - [ ] T9 `CLAUDE.md`, `AGENTS.md`, `README.md`; version 0.2.0 in six JSON files

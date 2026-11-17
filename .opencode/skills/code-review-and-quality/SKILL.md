@@ -227,6 +227,38 @@ Each drift finding says which side should change, the spec or the code. The user
 
 The main session triages the subagent's findings with the rules in [../../references/goldfish-review.md](../../references/goldfish-review.md): Fix, Contest, Escalate or Decline, and a contest must cite something the reviewer could read. A contested finding is not posted to the PR. It stays in the local review file with its evidence, so a later reader can check the call.
 
+## Posting a PR Review
+
+When the review target is a pull request, post one GitHub review with inline comments, not a single long comment. Inline comments sit on the exact lines, carry suggested changes the author can apply from the GitHub UI, and resolve as threads.
+
+1. **Find the PR.** Take owner, repo and number from the PR URL. For `#<n>`, get the repo from `gh repo view --json nameWithOwner`.
+2. **Find the commentable lines.** Run `gh api repos/<owner>/<repo>/pulls/<n>/files --paginate`. In each file's `patch`, every hunk header `@@ -a,b +c,d @@` makes lines `c` through `c+d-1` of the new file commentable. A file with no `patch` (binary, or too large) has no commentable lines.
+3. **Map findings to lines.** Each finding on a commentable line becomes an inline comment: `path`, `line`, `side: "RIGHT"`, and `start_line` plus `start_side` when it spans several lines. A finding on any other line goes in the summary body as `file:line`.
+4. **Write the comment.** Say what is wrong and what to do. Add a `suggestion` block only when the fix is an exact replacement for the commented lines; GitHub applies it as is. Otherwise describe the change and show a short code block.
+5. **Write the summary body.** Verdict first, then counts by severity, then the findings that could not go inline, then the `/ponytail-review` section. No headings when the review is short.
+6. **Humanize.** Run every body, summary and inline, through the `humanize` skill with its github voice: lowercase sentence starts, identifiers in their real casing. Code and `suggestion` blocks are not touched.
+7. **Build the JSON** in the scratchpad. `event` is always `COMMENT`: GitHub rejects `APPROVE` and `REQUEST_CHANGES` on your own PR, and a comment review works on every PR. Severity is stated in the text instead.
+
+   ```json
+   {
+     "event": "COMMENT",
+     "body": "one thing to fix before merge, two smaller ones.\n\n1 blocking, 2 nits. ...",
+     "comments": [
+       {
+         "path": "scripts/validate-commands.js",
+         "line": 48,
+         "side": "RIGHT",
+         "body": "this misses CRLF frontmatter, so `description` comes back null on Windows. blocks merge.\n\n```suggestion\n  const match = content.match(/^---[ \\t]*\\r?\\n([\\s\\S]*?)\\r?\\n---/);\n```"
+       }
+     ]
+   }
+   ```
+
+8. **Post it.** `gh api repos/<owner>/<repo>/pulls/<n>/reviews --method POST --input <file>`. If GitHub answers 422 because of a line, move that comment into the summary body as `file:line` and post once more. Do not retry further; report the error.
+9. **Do not ask first.** Posting the review on a PR you were asked to review is the deliverable.
+
+Local review files keep normal sentence case and include contested findings with their evidence; only the posted text uses the github voice.
+
 ## Multi-Model Review Pattern
 
 Use different models for different review perspectives:
@@ -394,6 +426,7 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 
 - PRs merged without any review
 - Reviewing a diff in the same session that wrote it, with no fresh-context pass
+- A PR review posted as one long comment when its findings map to lines in the diff
 - Review that only checks if tests pass (ignoring other axes)
 - "LGTM" without evidence of actual review
 - Security-sensitive changes without security-focused review
@@ -418,6 +451,7 @@ After review is complete:
 - [ ] Build succeeds
 - [ ] The verification story is documented (what changed, how it was verified)
 - [ ] The fresh-context review ran, or the output says it did not
+- [ ] On a PR: one review with event `COMMENT` was posted, findings on diff lines are inline, and the posted prose is lowercase
 - [ ] When a spec exists, drift was checked and reported (or "no drift found")
 - [ ] Dependency upgrades were reviewed against their changelog, isolated per package, and verified by a green suite with the lockfile diff reviewed
 
