@@ -103,6 +103,11 @@ Each task follows this structure, whether it lands in the markdown task list or 
 **Estimated scope:** [Small: 1-2 files | Medium: 3-5 files | Large: 5+ files]
 ```
 
+**Zero-decision rule.** The implementer makes no design choice the plan left open: no schema, function signature, dependency, error strategy or file location to pick. If a task needs one, decide it in the plan.
+
+- Weak: "update the auth service to handle expiry"
+- Ready: "add `expiresAt: Date` to `Session` in `src/auth/session.ts`, and make `requireSession()` reject a session whose `expiresAt` is in the past"
+
 ### Step 5: Order and Checkpoint
 
 Arrange tasks so that:
@@ -121,6 +126,12 @@ Add explicit checkpoints to the task list target:
 - [ ] Core user flow works end-to-end
 - [ ] Review with human before proceeding
 ```
+
+### Step 6: Goldfish Review
+
+Once `tasks/<feature-name>/plan.md` is saved, and before presenting it, run the protocol in [../../references/goldfish-review.md](../../references/goldfish-review.md) with the `readiness` and `codebase` lenses. Two fresh subagents read the plan, the spec it cites, and the repo, without this conversation, in parallel. Triage every finding, apply the fixes to the plan, and write the report to `tasks/<feature-name>/goldfish.md`. Then present the plan with what the reference's "What to show in chat" section lists.
+
+Planning writes plan artifacts only (`tasks/<feature-name>/`), never source files.
 
 ## Task Sizing Guidelines
 
@@ -174,6 +185,18 @@ When using an external tracker, note it in `tasks/<feature-name>/plan.md` (e.g. 
 ## Architecture Decisions
 - [Key decision 1 and rationale]
 - [Key decision 2 and rationale]
+
+## File Boundary
+Every path the tasks touch, repo-relative. A glob only for generated output whose names are not known in advance. `/build` stops and asks before editing a file not listed here.
+
+Create:
+- [path]
+
+Modify:
+- [path]
+
+Delete:
+- [path, or "none"]
 
 ## Task List
 
@@ -234,6 +257,8 @@ When multiple agents or sessions are available:
 - Overwriting a `tasks/<feature-name>/plan.md` or `tasks/<feature-name>/todo.md` that still has unchecked tasks for different work, without asking
 - Writing `tasks/<feature-name>/todo.md` when the project has designated an external tracker (or scattering tasks across both)
 - Tasks that say "implement the feature" without acceptance criteria
+- A task step that names a goal but no file or symbol
+- Presenting the plan before `tasks/<feature-name>/goldfish.md` exists
 - No verification steps in the plan
 - All tasks are XL-sized
 - No checkpoints between tasks
@@ -250,6 +275,8 @@ Before starting implementation, confirm:
 - [ ] No pre-existing incomplete plan was overwritten without explicit user confirmation
 - [ ] No task touches more than ~5 files
 - [ ] Checkpoints exist between major phases
+- [ ] The plan has a File Boundary with Create, Modify or Delete on every path
+- [ ] The goldfish report is written, and every finding has a decision (Fix, Contest, Escalate or Decline)
 - [ ] The human has reviewed and approved the plan
 
 ## See Also

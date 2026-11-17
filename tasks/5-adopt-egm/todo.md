@@ -13,7 +13,7 @@ Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
 - [x] Checkpoint: validators pass, `commands/spec.toml` equals `.gemini/commands/spec.toml`
 
 ## Phase 3: /plan and /build
-- [ ] T5 Planning skill: zero-decision rule, File Boundary in the template, Step 6 Goldfish review; three plan command files
+- [x] T5 Planning skill: zero-decision rule, File Boundary in the template, Step 6 Goldfish review; three plan command files
 - [ ] T6 `/build` stops before editing a file outside the File Boundary; three build command files
 - [ ] Checkpoint: validators pass, TOML mirrors equal
 

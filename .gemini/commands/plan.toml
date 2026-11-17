@@ -10,7 +10,7 @@ Read the existing spec (SPEC.md or equivalent) and the relevant codebase section
 3. Slice work vertically (one complete path per task, not horizontal layers)
 4. Write tasks with acceptance criteria and verification steps
 5. Add checkpoints between phases
-6. Present the plan for human review
+6. Run the Goldfish review step of the skill (`readiness` and `codebase` lenses), then present the plan for human review
 
-Save the plan to `tasks/<feature-name>/plan.md` and the task list to `tasks/<feature-name>/todo.md`, reusing the same `<feature-name>` slug as the spec (`spec/<feature-name>/spec.md`) — e.g. `tasks/377-chat-surface-materials/`. Create the directory if needed. Never write the plan or task list directly under `tasks/` — always nest them in the feature's own subdirectory.
+Save the plan to `tasks/<feature-name>/plan.md` and the task list to `tasks/<feature-name>/todo.md`, reusing the same `<feature-name>` slug as the spec (`spec/<feature-name>/spec.md`) — e.g. `tasks/377-chat-surface-materials/`. Create the directory if needed. Never write the plan or task list directly under `tasks/` — always nest them in the feature's own subdirectory. The plan includes a File Boundary section, and the goldfish report is saved next to it as `goldfish.md`.
 """
