@@ -8,6 +8,7 @@ Specialist personas that play a single role with a single perspective. Each pers
 | [security-auditor](../agents/security-auditor.md) | Security Engineer | Vulnerability detection, OWASP-style audit |
 | [test-engineer](../agents/test-engineer.md) | QA Engineer | Test strategy, coverage analysis, Prove-It pattern |
 | [web-performance-auditor](../agents/web-performance-auditor.md) | Web Performance Engineer | Core Web Vitals audit, loading/rendering/network analysis |
+| [goldfish-reviewer](../agents/goldfish-reviewer.md) | Fresh-context document reviewer | Spec and plan review inside `/spec` and `/plan`, one lens per instance |
 
 ## How personas relate to skills and commands
 

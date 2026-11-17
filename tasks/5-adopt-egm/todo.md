@@ -3,7 +3,7 @@
 Plan: `tasks/5-adopt-egm/plan.md`. Spec: `spec/5-adopt-egm/spec.md`.
 
 ## Phase 1: foundation
-- [ ] T1 Goldfish reference (`references/goldfish-review.md`), persona (`agents/goldfish-reviewer.md`), row in `docs/agents.md`
+- [x] T1 Goldfish reference (`references/goldfish-review.md`), persona (`agents/goldfish-reviewer.md`), row in `docs/agents.md`
 - [ ] T2 `skills/humanize/` with `references/writing-rules.md` and github voice, plus `.opencode` copy
 - [ ] Checkpoint: `npm run validate` and `npm test` pass
 
