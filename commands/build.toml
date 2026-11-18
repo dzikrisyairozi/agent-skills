@@ -23,6 +23,16 @@ Never commit directly to `master`, `main`, or `develop`. Before the *first* comm
 
 If `tasks/<feature-name>/plan.md` has a File Boundary section, it lists every file this build may create, modify or delete. Before touching a file that is not on it, stop and ask, in both modes. If the user approves, add the path to the plan's File Boundary and continue; otherwise rescope the task. Task-status updates and files under `spec/` and `tasks/` are always allowed. A plan with no File Boundary section skips this check. This is the hard stop behind Rule 0.5 (Scope Discipline) in `incremental-implementation`: a file the boundary does not list goes in the "noticed but not touching" note unless the user approves it.
 
+## Evidence (proof for the PR)
+
+Every task leaves proof that it was built and tested, saved where the PR description can use it later. Write it to `tasks/<feature-name>/evidence/`, with each file named by task ID: `T2-test.log`, `T2-build.log`, `T2-login-form.png`.
+
+- Logs: save the output of the final full test-suite run as `<task-id>-test.log` and of the build as `<task-id>-build.log`. Each log holds the command that ran and its real output, including the pass/fail counts. Never write a log by hand or from memory. Cut a very long log down to the command, any failures and the closing summary.
+- Screenshots: when the task changes something a user sees, run the app and capture the changed screen as `<task-id>-<what>.png`. For a change to an existing screen, capture it before and after. If no browser or screenshot tool is available, say so in the summary and leave the capture to the user; do not skip it silently.
+- Check every log and screenshot for tokens, passwords, connection strings and personal data before saving it. Redact what you find.
+- Stage the evidence files in the same commit as the task, so they have a stable path on the branch.
+- List the evidence paths in the summary. When a PR is opened later, its description quotes the pass lines from the logs and embeds the screenshots.
+
 ## Default: one task
 
 Pick the next pending task from the plan. Then:
@@ -31,9 +41,9 @@ Pick the next pending task from the plan. Then:
 2. Load relevant context (existing code, patterns, types) — prefer serena's `get_symbols_overview`/`find_symbol` over reading whole files
 3. Write a failing test for the expected behavior (RED)
 4. Implement the minimum code to pass the test (GREEN) — for a change scoped to one symbol, prefer serena's `replace_symbol_body`/`insert_after_symbol`/`insert_before_symbol` over a full-file edit
-5. Run the full test suite to check for regressions
-6. Run the build to verify compilation
-7. Apply **Branch safety** above, then commit with a descriptive message
+5. Run the full test suite to check for regressions, and save its output as evidence (see **Evidence** above)
+6. Run the build to verify compilation, and save its output as evidence; for a user-visible change, also capture a screenshot
+7. Apply **Branch safety** above, then commit the task and its evidence files with a descriptive message
 8. Mark the task complete and stop
 9. If that was the **final** pending task, run the **Comprehension gate** (below) before treating the work as ready to hand off, and mention `/review` (optionally chained with `/ponytail-review` for an over-engineering pass) as the next step.
 
@@ -46,7 +56,7 @@ Use this once a spec exists and you want to collapse plan + build into one run. 
 3. **Apply Branch safety** (above) — off the mainline branch before anything gets committed.
 4. **Plan if needed.** If there is no `tasks/<feature-name>/plan.md` for the spec's feature slug, invoke agent-skills:planning-and-task-breakdown to generate one.
 5. **Single checkpoint.** Present the full plan and wait for an unambiguous affirmative (e.g. "approve", "go", "yes"). Treat hedged responses ("looks reasonable", "I guess") as **not** approved. This is the only human gate — after approval, run autonomously. If you generated `tasks/<feature-name>/plan.md`, commit it and `tasks/<feature-name>/goldfish.md` as a single preparatory commit now so it doesn't bleed into the first task's commit.
-6. **Execute every task in dependency order.** Use each task's declared dependencies; if they aren't explicit, execute in the order the plan lists them. For each task, run the full default loop above (RED → GREEN → regression → build → commit → mark complete). Stage only the files that task touched plus its task-status update — never `git add -A` blindly — and make one commit per task so any point is a clean rollback.
+6. **Execute every task in dependency order.** Use each task's declared dependencies; if they aren't explicit, execute in the order the plan lists them. For each task, run the full default loop above (RED → GREEN → regression → build → evidence → commit → mark complete). Stage only the files that task touched plus its evidence files and its task-status update — never `git add -A` blindly — and make one commit per task so any point is a clean rollback.
 7. **Stop and ask the user** (do not push through) when:
    - a test can't be made to pass or the build breaks without an obvious fix → follow agent-skills:debugging-and-error-recovery
    - the spec is ambiguous, or a task needs a decision the spec doesn't cover
@@ -55,7 +65,7 @@ Use this once a spec exists and you want to collapse plan + build into one run. 
 
    After the user resolves a blocker, they re-invoke `/build auto` — it resumes from the next pending task.
 8. **Run the Comprehension gate** (below) once at the very end, before the final summary.
-9. **Summarize at the end:** tasks completed, tests added, commits made, which branch they landed on, and anything skipped, flagged, or left for the user. Mention `/review` (plus `/ponytail-review` for an over-engineering pass) as the next step.
+9. **Summarize at the end:** tasks completed, tests added, commits made, evidence files saved (with paths), which branch they landed on, and anything skipped, flagged, or left for the user. Mention `/review` (plus `/ponytail-review` for an over-engineering pass) as the next step.
 
 ## Comprehension gate (before hand-off)
 
